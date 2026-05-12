@@ -64,6 +64,9 @@ def run_generation(
 
 with gr.Blocks(title="GPT From Scratch") as demo:
     gr.Markdown("# GPT From Scratch")
+    gr.Markdown(
+        "This small GPT was trained on TinyStories, so it continues prompts as simple stories rather than following instructions like a chatbot."
+    )
     prompt = gr.Textbox(label="Prompt", value="Once upon a time", lines=4)
     with gr.Row():
         max_new_tokens = gr.Slider(1, 512, value=120, step=1, label="Max new tokens")
