@@ -150,8 +150,3 @@ This is a compact educational GPT, not a full GPT-2-scale model and not an instr
 - Package the checkpoint for Hugging Face Spaces
 - Add plots from `reports/runs/tiny/metrics.json`
 
-## Resume Bullets
-
-- Implemented a GPT-2-style decoder-only Transformer from scratch in PyTorch, including manual causal multi-head attention, residual Transformer blocks, tied embeddings, and autoregressive sampling.
-- Built an end-to-end language-modeling pipeline with BPE tokenizer training, TinyStories dataset preparation, AdamW optimization, cosine scheduling, checkpoint resume, evaluation, and a Gradio inference demo.
-- Trained and evaluated a 1.33M-parameter GPT checkpoint with lightweight tests covering causal masking, model shape/loss contracts, tokenizer round trips, checkpoint restoration, sampling, and tiny-batch overfitting.
