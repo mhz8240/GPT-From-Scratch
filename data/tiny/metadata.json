@@ -1,0 +1,8 @@
+{
+  "dataset": "tinystories",
+  "tokenizer_path": "/Users/michaelzheng119/Full-Stack Development Folder/GPT From Scratch/artifacts/tokenizer/tiny/tokenizer.json",
+  "vocab_size": 4096,
+  "train_tokens": 1052851,
+  "val_tokens": 102413,
+  "date_prepared": "2026-05-12T05:51:48.936050+00:00"
+}

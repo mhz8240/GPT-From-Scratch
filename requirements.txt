@@ -1,0 +1,12 @@
+torch
+numpy
+datasets
+tokenizers
+pyyaml
+tqdm
+matplotlib
+gradio
+wandb
+pytest
+ruff
+ipykernel

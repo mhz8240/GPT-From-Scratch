@@ -1,0 +1,16 @@
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+checkpoints/*.pt
+checkpoints/**/*.pt
+data/*.bin
+data/*.npy
+data/**/*.bin
+data/**/*.npy
+wandb/
+reports/runs/
+reports/evals/*.json
+.DS_Store

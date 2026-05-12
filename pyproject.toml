@@ -1,0 +1,42 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "gpt-from-scratch"
+version = "0.1.0"
+description = "A compact GPT-2-style decoder-only Transformer implemented from scratch in PyTorch."
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [{ name = "Michael Zheng" }]
+dependencies = [
+    "torch",
+    "numpy",
+    "datasets",
+    "tokenizers",
+    "pyyaml",
+    "tqdm",
+    "matplotlib",
+]
+
+[project.optional-dependencies]
+dev = ["pytest", "ruff", "ipykernel"]
+demo = ["gradio"]
+tracking = ["wandb"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+extend-exclude = ["*.ipynb"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+ignore = ["E501"]

@@ -1,0 +1,50 @@
+project:
+  name: GPT From Scratch
+  run_name: tiny
+  output_dir: checkpoints/tiny
+data:
+  dataset: tinystories
+  data_dir: data/tiny
+  tokenizer_path: artifacts/tokenizer/tiny/tokenizer.json
+  train_bin: data/tiny/train.bin
+  val_bin: data/tiny/val.bin
+  max_train_examples: 5000
+  max_val_examples: 500
+tokenizer:
+  vocab_size: 4096
+  min_frequency: 2
+model:
+  vocab_size: 4096
+  block_size: 128
+  n_layer: 4
+  n_head: 4
+  n_embd: 128
+  dropout: 0.1
+  bias: true
+  tie_weights: true
+training:
+  batch_size: 24
+  gradient_accumulation_steps: 2
+  max_steps: 5000
+  eval_interval: 250
+  eval_iters: 50
+  learning_rate: 0.0006
+  min_lr: 0.00006
+  warmup_steps: 200
+  weight_decay: 0.1
+  beta1: 0.9
+  beta2: 0.95
+  grad_clip: 1.0
+  seed: 1337
+  mixed_precision: true
+  compile_model: false
+logging:
+  use_wandb: false
+  wandb_project: gpt-from-scratch
+  log_interval: 25
+generation:
+  prompt: "Once upon a time"
+  max_new_tokens: 100
+  temperature: 0.8
+  top_k: 50
+  top_p: 0.95

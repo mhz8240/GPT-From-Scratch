@@ -1,0 +1,8 @@
+{
+  "dataset": "local_text",
+  "tokenizer_path": "/Users/michaelzheng119/Full-Stack Development Folder/GPT From Scratch/artifacts/tokenizer/debug/tokenizer.json",
+  "vocab_size": 256,
+  "train_tokens": 9900,
+  "val_tokens": 1101,
+  "date_prepared": "2026-05-12T05:37:07.050779+00:00"
+}

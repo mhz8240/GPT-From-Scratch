@@ -1,0 +1,175 @@
+Metadata-Version: 2.4
+Name: mini-gpt-scaling-lab
+Version: 0.1.0
+Summary: A GPT-2-style decoder-only Transformer implemented from scratch in PyTorch.
+Author: Michael Zheng
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+Requires-Dist: torch
+Requires-Dist: numpy
+Requires-Dist: datasets
+Requires-Dist: tokenizers
+Requires-Dist: pyyaml
+Requires-Dist: tqdm
+Requires-Dist: matplotlib
+Provides-Extra: dev
+Requires-Dist: pytest; extra == "dev"
+Requires-Dist: ruff; extra == "dev"
+Requires-Dist: ipykernel; extra == "dev"
+Provides-Extra: demo
+Requires-Dist: gradio; extra == "demo"
+Provides-Extra: tracking
+Requires-Dist: wandb; extra == "tracking"
+
+# Mini-GPT Scaling Lab
+
+Mini-GPT Scaling Lab is a recruiter-facing ML engineering project that implements a GPT-2-style decoder-only Transformer from scratch in PyTorch, then wraps it in a small but serious experiment framework for tokenizer training, dataset preparation, training, evaluation, checkpointing, generation, tests, and a local Gradio demo.
+
+The core Transformer is handwritten PyTorch: no `transformers.GPT2LMHeadModel`, no `AutoModelForCausalLM`, no `Trainer`, no `nn.TransformerEncoder`, and no `nn.MultiheadAttention`.
+
+## What Is Implemented
+
+- Causal self-attention with a lower-triangular mask
+- Multi-head attention with manual Q/K/V projection and reshaping
+- GPT-style Transformer blocks with LayerNorm, GELU MLPs, residual connections, dropout, and optional weight tying
+- BPE tokenizer training with the Hugging Face `tokenizers` library
+- Local text and TinyStories dataset preparation
+- AdamW training loop with warmup, cosine decay, gradient accumulation, clipping, validation, perplexity, samples, and checkpointing
+- Checkpoint resume and best/latest checkpoint saving
+- Evaluation scripts and parameter counting
+- Autoregressive generation with temperature, top-k, top-p, and repetition penalty
+- Debug, tiny, small, and medium scaling configs
+- Pytest coverage for attention masks, model shapes/loss, tokenizer round trips, checkpointing, sampling, generation, and tiny overfit behavior
+- Lightweight Gradio demo
+
+## Project Structure
+
+```text
+mini-gpt-scaling-lab/
+├── configs/                 # Debug/tiny/small/medium YAML configs
+├── data/                    # Tokenized datasets live here
+├── checkpoints/             # Model checkpoints live here
+├── notebooks/               # Original notebook plus architecture walkthrough
+├── src/minigpt/             # Package source
+├── scripts/                 # CLI entry points
+├── app/                     # Gradio demo
+├── reports/                 # Experiment notes, ablations, model card
+├── tests/                   # Lightweight pytest suite
+└── .github/workflows/       # CI
+```
+
+## Setup
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -U pip
+pip install -r requirements.txt
+pip install -e .
+```
+
+## Common Commands
+
+Train a tokenizer from local text:
+
+```bash
+python scripts/train_tokenizer.py \
+  --config configs/debug.yaml \
+  --input data/sample.txt \
+  --output-dir artifacts/tokenizer \
+  --vocab-size 256
+```
+
+Prepare a local text dataset:
+
+```bash
+python scripts/prepare_dataset.py --config configs/debug.yaml --input data/sample.txt
+```
+
+Prepare a small TinyStories sample:
+
+```bash
+python scripts/prepare_dataset.py --config configs/tiny.yaml
+```
+
+Train a debug model:
+
+```bash
+python scripts/train_model.py --config configs/debug.yaml
+```
+
+Train a tiny model:
+
+```bash
+python scripts/train_model.py --config configs/tiny.yaml
+```
+
+Resume training:
+
+```bash
+python scripts/train_model.py --config configs/tiny.yaml --resume checkpoints/tiny/latest.pt
+```
+
+Evaluate:
+
+```bash
+python scripts/run_eval.py --checkpoint checkpoints/tiny/best.pt --config configs/tiny.yaml
+```
+
+Sample:
+
+```bash
+python scripts/sample.py \
+  --checkpoint checkpoints/tiny/best.pt \
+  --prompt "Once upon a time" \
+  --max-new-tokens 100 \
+  --temperature 0.8 \
+  --top-k 50
+```
+
+Run the demo:
+
+```bash
+python app/app.py
+```
+
+## Scaling Lab
+
+| Config | Purpose | Approx Size | Context |
+|---|---:|---:|---:|
+| `debug.yaml` | Smoke tests and CPU sanity checks | <1M params | 64 |
+| `tiny.yaml` | Local experiments with readable TinyStories outputs | 1M-3M params | 128 |
+| `small.yaml` | More serious local/GPU runs | 8M-15M params | 256 |
+| `medium.yaml` | Longer GPU-oriented run | 25M-50M params | 512 |
+
+## Results Template
+
+| Model | Params | Dataset | Tokens | Context | Val Loss | Val Perplexity | Tokens/sec | Hardware |
+|---|---:|---|---:|---:|---:|---:|---:|---|
+| debug | TBD | TinyStories/local | TBD | 64 | TBD | TBD | TBD | TBD |
+
+## Ablation Plan
+
+- Model size: debug vs tiny vs small vs medium
+- Context length: 64, 128, 256, 512
+- Tokenizer vocab size: small educational vocab vs larger BPE vocab
+- Sampling strategy: greedy, top-k, top-p, temperature sweeps
+- Learning rate schedule: warmup length, min LR, cosine decay
+
+## Limitations
+
+This is not full GPT-2 scale. Small models trained on TinyStories or tiny local corpora will not be ChatGPT-like. Output quality depends heavily on dataset size, training time, tokenizer quality, and available compute.
+
+## Future Work
+
+- Distributed training with DDP
+- Larger corpora and cleaner data filtering
+- Better evaluation harness beyond validation perplexity
+- Quantized inference
+- Hugging Face Hub model upload
+
+## Resume Bullets
+
+- Built a GPT-2-style decoder-only Transformer from scratch in PyTorch, including manual causal multi-head attention, residual Transformer blocks, tied embeddings, and autoregressive sampling.
+- Developed an end-to-end LLM training framework with BPE tokenizer training, dataset preparation, AdamW optimization, cosine scheduling, checkpoint resume, evaluation, and Gradio inference demo.
+- Added lightweight CI-grade tests covering causal masking, model shape/loss contracts, tokenizer round trips, checkpoint restoration, sampling, and tiny-batch overfitting.

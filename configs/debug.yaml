@@ -1,0 +1,50 @@
+project:
+  name: GPT From Scratch
+  run_name: debug
+  output_dir: checkpoints/debug
+data:
+  dataset: local_text
+  data_dir: data/debug
+  tokenizer_path: artifacts/tokenizer/debug/tokenizer.json
+  train_bin: data/debug/train.bin
+  val_bin: data/debug/val.bin
+  max_train_examples: 200
+  max_val_examples: 50
+tokenizer:
+  vocab_size: 256
+  min_frequency: 1
+model:
+  vocab_size: 256
+  block_size: 64
+  n_layer: 2
+  n_head: 2
+  n_embd: 64
+  dropout: 0.1
+  bias: true
+  tie_weights: true
+training:
+  batch_size: 4
+  gradient_accumulation_steps: 1
+  max_steps: 10
+  eval_interval: 5
+  eval_iters: 4
+  learning_rate: 0.0005
+  min_lr: 0.00005
+  warmup_steps: 2
+  weight_decay: 0.1
+  beta1: 0.9
+  beta2: 0.95
+  grad_clip: 1.0
+  seed: 1337
+  mixed_precision: false
+  compile_model: false
+logging:
+  use_wandb: false
+  wandb_project: gpt-from-scratch
+  log_interval: 1
+generation:
+  prompt: "Once upon a time"
+  max_new_tokens: 40
+  temperature: 0.9
+  top_k: 40
+  top_p: 0.95
